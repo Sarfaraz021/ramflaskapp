@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Webcam Snapshot</title>
+</head>
+<body>
+    <h1>Webcam Snapshot</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="snapshotBtn">Capture Snapshot</button>
+    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    <img id="snapshotImg" src="" alt="Snapshot" style="display: none;">
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snapshotBtn = document.getElementById('snapshotBtn');
+        const snapshotImg = document.getElementById('snapshotImg');
+
+        // Access the webcam and stream video
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing the webcam:', err);
+            });
+
+        // Capture snapshot when the button is clicked
+        snapshotBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Display the snapshot image
+            snapshotImg.src = canvas.toDataURL();
+            snapshotImg.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
